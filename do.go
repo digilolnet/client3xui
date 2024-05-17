@@ -55,3 +55,25 @@ func (c *Client) Do(ctx context.Context, method, path string, in, out interface{
 	}
 	return json.Unmarshal(body, out)
 }
+
+func (c *Client) DoRaw(ctx context.Context, method, baseurl, path string) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, method, baseurl+path, nil)
+	if err != nil {
+		return nil, err
+	}
+	err = c.loginIfNoCookie(ctx)
+	if err != nil {
+		return nil, err
+	}
+	req.AddCookie(c.sessionCookie)
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("http status %v", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}

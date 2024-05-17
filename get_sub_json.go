@@ -16,20 +16,11 @@
 
 package client3xui
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
-type Client struct {
-	url, subUrl, username, password string
-	httpClient              *http.Client
-	sessionCookie           *http.Cookie
-}
-
-func New(c Config) *Client {
-	cl := &Client{url: c.Url, subUrl: c.SubUrl, username: c.Username, password: c.Password}
-	if c.Client == nil {
-		cl.httpClient = http.DefaultClient
-	} else {
-		cl.httpClient = c.Client
-	}
-	return cl
+func (c *Client) GetSubJson(ctx context.Context, subID string) ([]byte, error) {
+	return c.DoRaw(ctx, http.MethodGet, c.subUrl, "/json/" + subID)
 }

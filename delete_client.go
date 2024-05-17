@@ -18,12 +18,14 @@ package client3xui
 
 import (
 	"context"
+	"strconv"
 	"net/http"
 )
 
 // Add client to an inbound.
 func (c *Client) DeleteClient(ctx context.Context, inboundId uint, clientUuid string) (*ApiResponse, error) {
 	resp := &ApiResponse{}
-	err := c.Do(ctx, http.MethodPost, "/panel/api/inbounds/"+string(inboundId)+"/delClient/"+clientUuid, nil, resp)
+	inboundIdStr := strconv.FormatUint(uint64(inboundId), 10)
+	err := c.Do(ctx, http.MethodPost, "/panel/api/inbounds/"+inboundIdStr+"/delClient/"+clientUuid, nil, resp)
 	return resp, err
 }
