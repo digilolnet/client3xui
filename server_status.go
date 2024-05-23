@@ -32,7 +32,7 @@ const (
 type ServerStatusResponse struct {
 	Success bool   `json:"success"`
 	Msg     string `json:"msg"`
-	Obj     struct {
+	Obj     *struct {
 		Cpu         float64 `json:"cpu"`
 		CpuCores    int     `json:"cpuCores"`
 		CpuSpeedMhz float64 `json:"cpuSpeedMhz"`

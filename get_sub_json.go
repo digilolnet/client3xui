@@ -22,5 +22,5 @@ import (
 )
 
 func (c *Client) GetSubJson(ctx context.Context, subID string) ([]byte, error) {
-	return c.DoRaw(ctx, http.MethodGet, c.subUrl, "/json/" + subID)
+	return c.DoRaw(ctx, http.MethodGet, c.subUrl, "/json/"+subID, "application/json", nil)
 }

@@ -56,8 +56,8 @@ func (c *Client) Do(ctx context.Context, method, path string, in, out interface{
 	return json.Unmarshal(body, out)
 }
 
-func (c *Client) DoRaw(ctx context.Context, method, baseurl, path string) ([]byte, error) {
-	req, err := http.NewRequestWithContext(ctx, method, baseurl+path, nil)
+func (c *Client) DoRaw(ctx context.Context, method, baseurl, path, contentType string, body []byte) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, method, baseurl+path, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *Client) DoRaw(ctx context.Context, method, baseurl, path string) ([]byt
 		return nil, err
 	}
 	req.AddCookie(c.sessionCookie)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", contentType)
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err

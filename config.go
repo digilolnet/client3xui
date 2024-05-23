@@ -20,5 +20,5 @@ import "net/http"
 
 type Config struct {
 	Url, SubUrl, Username, Password string
-	Client                  *http.Client
+	Client                          *http.Client
 }

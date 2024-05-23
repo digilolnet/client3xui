@@ -20,8 +20,8 @@ import "net/http"
 
 type Client struct {
 	url, subUrl, username, password string
-	httpClient              *http.Client
-	sessionCookie           *http.Cookie
+	httpClient                      *http.Client
+	sessionCookie                   *http.Cookie
 }
 
 func New(c Config) *Client {
