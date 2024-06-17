@@ -19,13 +19,20 @@ package client3xui
 import "net/http"
 
 type Client struct {
-	url, subUrl, username, password string
-	httpClient                      *http.Client
-	sessionCookie                   *http.Cookie
+	url, subUrl, host  string
+	password, username string
+	httpClient         *http.Client
+	sessionCookie      *http.Cookie
 }
 
 func New(c Config) *Client {
-	cl := &Client{url: c.Url, subUrl: c.SubUrl, username: c.Username, password: c.Password}
+	cl := &Client{
+		url:      c.Url,
+		subUrl:   c.SubUrl,
+		host:     c.Host,
+		username: c.Username,
+		password: c.Password,
+	}
 	if c.Client == nil {
 		cl.httpClient = http.DefaultClient
 	} else {

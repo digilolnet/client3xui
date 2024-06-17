@@ -19,6 +19,7 @@ package client3xui
 import "net/http"
 
 type Config struct {
-	Url, SubUrl, Username, Password string
-	Client                          *http.Client
+	Url, SubUrl, Host  string
+	Username, Password string
+	Client             *http.Client
 }

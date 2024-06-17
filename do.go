@@ -67,6 +67,9 @@ func (c *Client) DoRaw(ctx context.Context, method, baseurl, path, contentType s
 	}
 	req.AddCookie(c.sessionCookie)
 	req.Header.Set("Content-Type", contentType)
+	if c.host != "" {
+		req.Host = c.host
+	}
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err
