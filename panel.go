@@ -109,7 +109,7 @@ func (c *Client) EditPanelSettings(ctx context.Context, settings PanelSettings) 
 		return err
 	}
 	if !genericResp.Success {
-		return fmt.Errorf("Failed to edit panel settings")
+		return fmt.Errorf("failed to edit panel settings")
 	}
 	return nil
 }

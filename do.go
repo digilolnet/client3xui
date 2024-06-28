@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 func (c *Client) Do(ctx context.Context, method, path string, in, out interface{}) error {
@@ -79,4 +81,30 @@ func (c *Client) DoRaw(ctx context.Context, method, baseurl, path, contentType s
 	}
 	defer resp.Body.Close()
 	return io.ReadAll(resp.Body)
+}
+
+func (c *Client) DoForm(ctx context.Context, method, path string, form url.Values, out interface{}) error {
+	req, err := http.NewRequestWithContext(ctx, method, c.url+path, strings.NewReader(form.Encode()))
+	if err != nil {
+		return err
+	}
+	err = c.loginIfNoCookie(ctx)
+	if err != nil {
+		return err
+	}
+	req.AddCookie(c.sessionCookie)
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("http status %v", resp.StatusCode)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(body, out)
 }
