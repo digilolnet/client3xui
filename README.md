@@ -14,81 +14,81 @@
 package main
 
 import (
-	"context"
-	"log"
-	"fmt"
+        "context"
+        "fmt"
+        "log"
 
-	"github.com/digilolnet/client3xui"
+        "github.com/digilolnet/client3xui"
 )
 
 func main() {
-	server := client3xui.New(client3xui.Config{
-	        Url:      "https://xrayserver.tld:8843",
-	        Username: "digilol",
-	        Password: "secr3t",
-	})
+        server := client3xui.New(client3xui.Config{
+                Url:      "https://xrayserver.tld:8843",
+                Username: "digilol",
+                Password: "secr3t",
+        })
 
-	// Get server status
-	status, err := server.ServerStatus(context.Background())
-	if err != nil {
-	        log.Fatal(err)
-	}
-	fmt.Println(status)
+        // Get server status
+        status, err := server.ServerStatus(context.Background())
+        if err != nil {
+                log.Fatal(err)
+        }
+        fmt.Println(status)
 
-	//Add new inbound
-	inbound := client3xui.InboundSetting{
-        Up: "0",
-        Down: "0",
-        Total: "0",
-        Remark: "",
-        Enable: "true",
-        ExpiryTime: "0",
-        Listen: "",
-        Port: "13337",
-        Protocol: "vmess",
-    }
+        //Add new inbound
+        inbound := client3xui.InboundSetting{
+                Up:         "0",
+                Down:       "0",
+                Total:      "0",
+                Remark:     "",
+                Enable:     "true",
+                ExpiryTime: "0",
+                Listen:     "",
+                Port:       "13337",
+                Protocol:   "vmess",
+        }
 
-    proto := client3xui.VmessSetting{
-        Clients: []client3xui.ClientOptions{
-            client3xui.ClientOptions{
-                ID: uuid.NewString(),
-                Email: "niceclient",
-                Enable: true,
-                SubId: "dhgsyf6384j9u889hd89edhlj",
-            },
-        },
-    }
+        proto := client3xui.VmessSetting{
+                Clients: []client3xui.ClientOptions{
+                        client3xui.ClientOptions{
+                                ID:     uuid.NewString(),
+                                Email:  "niceclient",
+                                Enable: true,
+                                SubId:  "dhgsyf6384j9u889hd89edhlj",
+                        },
+                },
+        }
 
-    tcp := client3xui.TcpStreamSetting{
-        Network: "tcp",
-        Security: "none",
-		TcpSettings: client3xui.TcpSetting{
-			Header: client3xui.HeaderSetting{
-				Type: "none" ,
-			},
-        },
-    }
+        tcp := client3xui.TcpStreamSetting{
+                Network:  "tcp",
+                Security: "none",
+                TcpSettings: client3xui.TcpSetting{
+                        Header: client3xui.HeaderSetting{
+                                Type: "none",
+                        },
+                },
+        }
 
-    snif := client3xui.SniffingSetting{
-        Enabled: true,
-        DestOverride: []string{"http", "tls", "quic", "fakedns"},
-    }
+        snif := client3xui.SniffingSetting{
+                Enabled:      true,
+                DestOverride: []string{"http", "tls", "quic", "fakedns"},
+        }
 
-    ret, err := client3xui.AddInbound(context.Background(), server, inbound, proto, tcp, snif)
-    if err != nil {
-        log.Fatal(err)
-    }
+        ret, err := client3xui.AddInbound(context.Background(), server, inbound, proto, tcp, snif)
+        if err != nil {
+                log.Fatal(err)
+        }
 
-	// Add new client
-	clis := []client3xui.XrayClient{
-		{ID:"fab5a8c0-89b4-43a8-9871-82fe6e2c8c8a",
-		Email: "fab5a8c0-89b4-43a8-9871-82fe6e2c8c8a",
-		Enable: true,},
-	}
-	resp, err := server.AddClient(context.Background(), 1, clis)
-	if err != nil {
-	           log.Fatal(err)
-	}
-	fmt.Println(*resp)
+        // Add new client
+        clis := []client3xui.XrayClient{
+                {ID: "fab5a8c0-89b4-43a8-9871-82fe6e2c8c8a",
+                Email:  "fab5a8c0-89b4-43a8-9871-82fe6e2c8c8a",
+                Enable: true},
+        }
+        resp, err := server.AddClient(context.Background(), 1, clis)
+        if err != nil {
+                log.Fatal(err)
+        }
+        fmt.Println(*resp)
 }
 ```
