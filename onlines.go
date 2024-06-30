@@ -19,6 +19,7 @@ package client3xui
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -29,7 +30,9 @@ func (c *Client) GetOnlineClients(ctx context.Context) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	if !resp.Success {
+		return nil, fmt.Errorf(resp.Msg)
+	}
 	var clients []string
 	err = json.Unmarshal(resp.Obj, &clients)
 	return clients, err

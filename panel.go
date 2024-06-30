@@ -58,10 +58,16 @@ type PanelSettingsResponse struct {
 	Obj     *PanelSettings `json:"obj"`
 }
 
-func (c *Client) GetPanelSettings(ctx context.Context) (*PanelSettings, error) {
+func (c *Client) GetPanelSettings(ctx context.Context) (*PanelSettingsResponse, error) {
 	resp := &PanelSettingsResponse{}
 	err := c.Do(ctx, http.MethodPost, "/panel/setting/all", nil, resp)
-	return resp.Obj, err
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
+	return resp, err
 }
 
 func panelSettingsToMap(obj PanelSettings) map[string]string {
@@ -109,7 +115,7 @@ func (c *Client) EditPanelSettings(ctx context.Context, settings PanelSettings) 
 		return err
 	}
 	if !genericResp.Success {
-		return fmt.Errorf("failed to edit panel settings")
+		return fmt.Errorf(genericResp.Msg)
 	}
 	return nil
 }
@@ -117,5 +123,11 @@ func (c *Client) EditPanelSettings(ctx context.Context, settings PanelSettings) 
 func (c *Client) RestartPanel(ctx context.Context) (*ApiResponse, error) {
 	resp := &ApiResponse{}
 	err := c.Do(ctx, http.MethodPost, "/panel/setting/restartPanel", nil, resp)
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
 	return resp, err
 }

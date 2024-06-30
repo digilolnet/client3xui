@@ -19,6 +19,7 @@ package client3xui
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -128,5 +129,11 @@ func AddInbound[T VlessSetting | VmessSetting, K TcpStreamSetting | QuicStreamSe
 
 	resp := &ApiResponse{}
 	err = c.DoForm(ctx, http.MethodPost, "/panel/inbound/add", form, resp)
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
 	return resp, err
 }

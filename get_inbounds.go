@@ -2,6 +2,7 @@ package client3xui
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -44,5 +45,11 @@ type ClientStat struct {
 func (c *Client) GetInbounds(ctx context.Context) (*GetInboundsResponse, error) {
 	resp := &GetInboundsResponse{}
 	err := c.Do(ctx, http.MethodPost, "/panel/inbound/list", nil, resp)
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
 	return resp, err
 }

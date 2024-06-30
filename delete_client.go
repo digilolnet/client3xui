@@ -18,6 +18,7 @@ package client3xui
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -27,5 +28,11 @@ func (c *Client) DeleteClient(ctx context.Context, inboundId uint, clientUuid st
 	resp := &ApiResponse{}
 	inboundIdStr := strconv.FormatUint(uint64(inboundId), 10)
 	err := c.Do(ctx, http.MethodPost, "/panel/api/inbounds/"+inboundIdStr+"/delClient/"+clientUuid, nil, resp)
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
 	return resp, err
 }

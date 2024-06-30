@@ -19,6 +19,7 @@ package client3xui
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -57,5 +58,11 @@ func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []XrayCl
 	req := &AddClientRequest{ID: inboundId, Settings: string(settingsBytes)}
 	resp := &ApiResponse{}
 	err = c.Do(ctx, http.MethodPost, "/panel/api/inbounds/addClient", req, resp)
+	if err != nil {
+		return nil, err
+	}
+	if !resp.Success {
+		return resp, fmt.Errorf(resp.Msg)
+	}
 	return resp, err
 }
