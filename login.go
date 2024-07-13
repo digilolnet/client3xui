@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type loginResponse struct {
@@ -57,8 +58,9 @@ func (c *Client) login(ctx context.Context) error {
 		return errors.New(loginResp.Msg)
 	}
 	for _, cookie := range resp.Cookies() {
-		if cookie.Name == "session" {
+		if cookie.Name == "3x-ui" {
 			c.sessionCookie = cookie
+			c.sessionExpires = cookie.Expires.Add(-6 * time.Hour)
 			return nil
 		}
 	}
@@ -66,7 +68,7 @@ func (c *Client) login(ctx context.Context) error {
 }
 
 func (c *Client) loginIfNoCookie(ctx context.Context) error {
-	if c.sessionCookie != nil {
+	if c.sessionCookie != nil && c.sessionExpires.After(time.Now()) {
 		return nil
 	}
 	return c.login(ctx)

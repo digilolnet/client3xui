@@ -16,13 +16,17 @@
 
 package client3xui
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
 type Client struct {
 	url, subUrl, host  string
 	password, username string
 	httpClient         *http.Client
 	sessionCookie      *http.Cookie
+	sessionExpires     time.Time
 }
 
 func New(c Config) *Client {
