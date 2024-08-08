@@ -54,7 +54,7 @@ type TcpStreamSetting struct {
 	Network       string     `json:"network"`
 	Security      string     `json:"security"`
 	ExternalProxy []string   `json:"externalProxy"`
-	TcpSettings   TcpSetting `json:"tcpSetting"`
+	TcpSettings   TcpSetting `json:"tcpSettings"`
 }
 
 type QuicSetting struct {
@@ -67,7 +67,7 @@ type QuicStreamSetting struct {
 	Network       string      `json:"network"`
 	Security      string      `json:"security"`
 	ExternalProxy []string    `json:"externalProxy"`
-	QuicSettings  QuicSetting `json:"tcpSetting"`
+	QuicSettings  QuicSetting `json:"quicSettings"`
 }
 
 type SniffingSetting struct {
