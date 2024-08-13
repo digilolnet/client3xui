@@ -61,9 +61,13 @@ func (c *Client) login(ctx context.Context) error {
 		if cookie.Name == "3x-ui" {
 			c.sessionCookie = cookie
 			c.sessionExpires = cookie.Expires.Add(-6 * time.Hour)
-			return nil
 		}
 	}
+
+	if c.sessionCookie != nil {
+		return nil
+	}
+
 	return errors.New("session cookie not found")
 }
 
