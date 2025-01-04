@@ -128,7 +128,7 @@ func AddInbound[T VlessSetting | VmessSetting, K TcpStreamSetting | QuicStreamSe
 	form.Add("protocol", inOpt.Protocol)
 
 	resp := &ApiResponse{}
-	err = c.DoForm(ctx, http.MethodPost, "/panel/inbound/add", form, resp)
+	err = c.DoForm(ctx, http.MethodPost, "/panel/api/inbounds/add", form, resp)
 	if err != nil {
 		return nil, err
 	}
