@@ -44,7 +44,7 @@ type ClientStat struct {
 
 func (c *Client) GetInbounds(ctx context.Context) (*GetInboundsResponse, error) {
 	resp := &GetInboundsResponse{}
-	err := c.Do(ctx, http.MethodPost, "/panel/inbound/list", nil, resp)
+	err := c.Do(ctx, http.MethodPost, "/panel/api/inbounds/list", nil, resp)
 	if err != nil {
 		return nil, err
 	}
