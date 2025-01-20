@@ -1,5 +1,5 @@
-/* Copyright 2024 İrem Kuyucu <irem@digilol.net>
- * Copyright 2024 Laurynas Četyrkinas <laurynas@digilol.net>
+/* Copyright 2025 İrem Kuyucu <irem@digilol.net>
+ * Copyright 2025 Laurynas Četyrkinas <laurynas@digilol.net>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,31 +45,6 @@ type HeaderSetting struct {
 	Type string `json:"type"`
 }
 
-type TcpSetting struct {
-	AcceptProxyProtocol bool          `json:"acceptProxyProtocol"`
-	Header              HeaderSetting `json:"header"`
-}
-
-type TcpStreamSetting struct {
-	Network       string     `json:"network"`
-	Security      string     `json:"security"`
-	ExternalProxy []string   `json:"externalProxy"`
-	TcpSettings   TcpSetting `json:"tcpSettings"`
-}
-
-type QuicSetting struct {
-	Security string        `json:"security"`
-	Key      string        `json:"key"`
-	Header   HeaderSetting `json:"header"`
-}
-
-type QuicStreamSetting struct {
-	Network       string      `json:"network"`
-	Security      string      `json:"security"`
-	ExternalProxy []string    `json:"externalProxy"`
-	QuicSettings  QuicSetting `json:"quicSettings"`
-}
-
 type SniffingSetting struct {
 	Enabled      bool     `json:"enabled"`
 	DestOverride []string `json:"destOverride"`
@@ -95,8 +70,7 @@ type VmessSetting struct {
 	Clients []ClientOptions `json:"clients"`
 }
 
-// Ugly function signature due to a limitation in Go, this function cannot be a method of *Client.
-func AddInbound[T VlessSetting | VmessSetting, K TcpStreamSetting | QuicStreamSetting](ctx context.Context, c *Client, inOpt InboundSetting, pOpt T, strOpt K, sniOpt SniffingSetting) (*ApiResponse, error) {
+func AddInbound[T VlessSetting | VmessSetting, K TcpStreamSetting | QuicStreamSetting | XhttpStreamSetting](ctx context.Context, c *Client, inOpt InboundSetting, pOpt T, strOpt K, sniOpt SniffingSetting) (*ApiResponse, error) {
 	form := url.Values{}
 
 	protoSettings, err := json.Marshal(pOpt)

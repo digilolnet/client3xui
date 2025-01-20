@@ -1,5 +1,5 @@
-/* Copyright 2024 İrem Kuyucu <irem@digilol.net>
- * Copyright 2024 Laurynas Četyrkinas <laurynas@digilol.net>
+/* Copyright 2025 İrem Kuyucu <irem@digilol.net>
+ * Copyright 2025 Laurynas Četyrkinas <laurynas@digilol.net>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

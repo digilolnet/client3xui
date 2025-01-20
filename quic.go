@@ -15,26 +15,16 @@
 
 package client3xui
 
-import (
-	"context"
-	"fmt"
-	"net/http"
-)
-
-type GetInboundResponse struct {
-	Success bool    `json:"success"`
-	Msg     string  `json:"msg"`
-	Obj     Inbound `json:"obj"`
+// QUIC was deprecated in favor of XHTTP in Xray-core v24.9.30
+type QuicSetting struct {
+	Security string        `json:"security"`
+	Key      string        `json:"key"`
+	Header   HeaderSetting `json:"header"`
 }
 
-func (c *Client) GetInbound(ctx context.Context, inbound_id uint) (*GetInboundResponse, error) {
-	resp := &GetInboundResponse{}
-	err := c.Do(ctx, http.MethodPost, fmt.Sprintf("/panel/api/inbounds/get/%d", inbound_id), nil, resp)
-	if err != nil {
-		return nil, err
-	}
-	if !resp.Success {
-		return resp, fmt.Errorf(resp.Msg)
-	}
-	return resp, err
+type QuicStreamSetting struct {
+	Network       string      `json:"network"`
+	Security      string      `json:"security"`
+	ExternalProxy []string    `json:"externalProxy"`
+	QuicSettings  QuicSetting `json:"quicSettings"`
 }

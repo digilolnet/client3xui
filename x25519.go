@@ -21,20 +21,24 @@ import (
 	"net/http"
 )
 
-type GetInboundResponse struct {
-	Success bool    `json:"success"`
-	Msg     string  `json:"msg"`
-	Obj     Inbound `json:"obj"`
+type X25519Response struct {
+	Success bool   `json:"success"`
+	Msg     string `json:"msg"`
+	Obj     struct {
+		PrivateKey string `json:"privateKey"`
+		PublicKey  string `json:"publicKey"`
+	} `json:"obj"`
 }
 
-func (c *Client) GetInbound(ctx context.Context, inbound_id uint) (*GetInboundResponse, error) {
-	resp := &GetInboundResponse{}
-	err := c.Do(ctx, http.MethodPost, fmt.Sprintf("/panel/api/inbounds/get/%d", inbound_id), nil, resp)
+// Get keys for use in inbound creation
+func (c *Client) GetNewX25519Cert(ctx context.Context) (*X25519Response, error) {
+	resp := &X25519Response{}
+	err := c.DoForm(ctx, http.MethodPost, "/server/getNewX25519Cert", nil, resp)
 	if err != nil {
 		return nil, err
 	}
 	if !resp.Success {
 		return resp, fmt.Errorf(resp.Msg)
 	}
-	return resp, err
+	return resp, nil
 }
