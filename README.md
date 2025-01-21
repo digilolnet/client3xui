@@ -4,11 +4,13 @@
 [![GoDoc](https://godoc.org/github.com/digilolnet/client3xui?status.svg)](https://godoc.org/github.com/digilolnet/client3xui)
 [![License](https://img.shields.io/github/license/digilolnet/client3xui.svg)](https://github.com/digilolnet/client3xui/blob/master/LICENSE.md)
 
-[3X-UI](https://github.com/MHSanaei/3x-ui) API wrapper in Go.
+[3X-UI](https://github.com/MHSanaei/3x-ui) API wrapper in Go brought to you by:
 
-[![Digilol offers managed hosting and software development](https://www.digilol.net/banner-hosting-development.png)](https://www.digilol.net)
+[<img alt="Digilol offers managed hosting and software development" src="https://www.digilol.net/banner-hosting-development.png" width="500" />](https://www.digilol.net)
 
-## Usage
+## Examples
+
+### VMESS + TCP
 
 ```go
 package main
@@ -90,5 +92,122 @@ func main() {
                 log.Fatal(err)
         }
         fmt.Println(*resp)
+}
+```
+
+### VLESS + REALITY + XHTTP
+
+```go
+package main
+
+import (
+        "context"
+        "fmt"
+        "log"
+
+        "github.com/google/uuid"
+        "github.com/digilolnet/client3xui"
+)
+
+func main() {
+        server := client3xui.New(client3xui.Config{
+                Url:      "https://xrayserver.tld:8843/panelpath",
+                Username: "digilol",
+                Password: "secr3t",
+        })
+
+
+        // Get server status
+        status, err := server.ServerStatus(context.Background())
+        if err != nil {
+                log.Fatal(err)
+        }
+        fmt.Println(status)
+
+        // Get new X25519 certificate for Reality
+        cert, err := server.GetNewX25519Cert(context.Background())
+        if err != nil {
+                log.Fatal(err)
+        }
+
+        // Add new inbound
+        inbound := client3xui.InboundSetting{
+                Up:         "0",
+                Down:       "0",
+                Total:      "0",
+                Remark:     "",
+                Enable:     "true",
+                ExpiryTime: "0",
+                Listen:     "",
+                Port:       "10600",
+                Protocol:   "vless",
+        }
+
+        proto := client3xui.VlessSetting{
+                Clients: []client3xui.ClientOptions{
+                        {
+                                ID:     uuid.NewString(),
+                                Flow:   "",
+                                Email:  "realityclient",
+                                Enable: true,
+                                SubId:  "81h6cr12m5w0wm6i",
+                        },
+                },
+                Decryption: "none",
+                Fallbacks:  []client3xui.FallbackOptions{},
+        }
+
+        stream := client3xui.XhttpStreamSetting{
+                Network:       "xhttp",
+                Security:     "reality",
+                ExternalProxy: []string{},
+                RealitySettings: client3xui.RealitySettings{
+                        Show:        false,
+                        Xver:        0,
+                        Dest:        "yahoo.com:443",
+                        ServerNames: []string{"yahoo.com", "www.yahoo.com"},
+                        PrivateKey:  cert.Obj.PrivateKey,
+                        MinClient:   "",
+                        MaxClient:   "",
+                        MaxTimediff: 0,
+                        ShortIds:    []string{"8db425d836eaa5", "9b", "edcfcd9bbf05768e"},
+                        Settings: client3xui.RealitySettingsInner{
+                                PublicKey:   cert.Obj.PublicKey,
+                                Fingerprint: "chrome",
+                                ServerName:  "",
+                                SpiderX:     "/",
+                        },
+                },
+                XhttpSettings: client3xui.XhttpSetting{
+                        Path:               "/",
+                        Host:               "",
+                        Headers:            map[string]string{},
+                        ScMaxBufferedPosts: 30,
+                        ScMaxEachPostBytes: "1000000",
+                        NoSSEHeader:        false,
+                        XPaddingBytes:      "100-1000",
+                        Mode:               "auto",
+                },
+        }
+
+        snif := client3xui.SniffingSetting{
+                Enabled:      false,
+                DestOverride: []string{"http", "tls", "quic", "fakedns"},
+                MetadataOnly: false,
+                RouteOnly:    false,
+        }
+
+        ret, err := client3xui.AddInbound[client3xui.VlessSetting, client3xui.XhttpStreamSetting](
+                context.Background(),
+                server,
+                inbound,
+                proto,
+                stream,
+                snif,
+        )
+        if err != nil {
+                log.Fatal(err)
+        }
+        log.Printf("%v", ret)
 }
 ```
