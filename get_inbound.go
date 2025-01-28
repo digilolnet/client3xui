@@ -29,7 +29,7 @@ type GetInboundResponse struct {
 
 func (c *Client) GetInbound(ctx context.Context, inbound_id uint) (*GetInboundResponse, error) {
 	resp := &GetInboundResponse{}
-	err := c.Do(ctx, http.MethodPost, fmt.Sprintf("/panel/api/inbounds/get/%d", inbound_id), nil, resp)
+	err := c.Do(ctx, http.MethodGet, fmt.Sprintf("/panel/api/inbounds/get/%d", inbound_id), nil, resp)
 	if err != nil {
 		return nil, err
 	}
