@@ -170,7 +170,7 @@ func main() {
                         MinClient:   "",
                         MaxClient:   "",
                         MaxTimediff: 0,
-                        ShortIds:    []string{"8db425d836eaa5", "9b", "edcfcd9bbf05768e"},
+                        ShortIds:    []string{client3xui.GenerateShortId(14), client3xui.GenerateShortId(2), client3xui.GenerateShortId(16)},
                         Settings: client3xui.RealitySettingsInner{
                                 PublicKey:   cert.Obj.PublicKey,
                                 Fingerprint: "chrome",
