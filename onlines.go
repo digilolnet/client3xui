@@ -26,7 +26,7 @@ import (
 // Get online clients. Returns a slice of client IDs/emails.
 func (c *Client) GetOnlineClients(ctx context.Context) ([]string, error) {
 	resp := &ApiResponse{}
-	err := c.Do(ctx, http.MethodPost, "/panel/api/inbounds/onlines", nil, resp)
+	err := c.Do(ctx, http.MethodPost, "/panel/inbound/onlines", nil, resp)
 	if err != nil {
 		return nil, err
 	}
