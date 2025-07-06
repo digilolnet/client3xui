@@ -35,6 +35,11 @@ type ClientSettings struct {
 	Clients []XrayClient `json:"clients"`
 }
 
+const (
+	FlowXtlsRprxVision       = "xtls-rprx-vision"
+	FlowXtlsRprxVisionUDP443 = "xtls-rprx-vision-udp443"
+)
+
 type XrayClient struct {
 	ID         string `json:"id"`
 	AlterID    uint   `json:"alter_id,omitempty"`
@@ -45,6 +50,7 @@ type XrayClient struct {
 	Enable     bool   `json:"enable"`
 	TgID       uint   `json:"tgId"`
 	SubID      string `json:"subId"`
+	Flow       string `json:"flow"`
 }
 
 // Add client to an inbound.
