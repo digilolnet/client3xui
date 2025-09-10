@@ -32,6 +32,7 @@ type Inbound struct {
 	Up             int          `json:"up"`
 	Down           int          `json:"down"`
 	Total          int          `json:"total"`
+	AllTime        int          `json:"allTime,omitempty"`
 	Remark         string       `json:"remark"`
 	Enable         bool         `json:"enable"`
 	ExpiryTime     int          `json:"expiryTime"`
@@ -52,6 +53,7 @@ type ClientStat struct {
 	Email      string `json:"email"`
 	Up         int    `json:"up"`
 	Down       int    `json:"down"`
+	AllTime    int    `json:"allTime,omitempty"`
 	ExpiryTime int    `json:"expiryTime"`
 	Total      int    `json:"total"`
 	Reset      int    `json:"reset"`
