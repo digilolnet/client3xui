@@ -32,7 +32,7 @@ type AddClientRequest struct {
 }
 
 type ClientSettings struct {
-	Clients []XrayClient `json:"clients"`
+	Clients []any `json:"clients"`
 }
 
 const (
@@ -53,8 +53,19 @@ type XrayClient struct {
 	Flow       string `json:"flow"`
 }
 
+type TrojanClient struct {
+	Password   string `json:"password"`
+	Email      string `json:"email"`
+	LimitIP    uint   `json:"limitIp"`
+	TotalGB    uint64 `json:"totalGB"`
+	ExpiryTime uint64 `json:"expiryTime"`
+	Enable     bool   `json:"enable"`
+	TgID       uint   `json:"tgId"`
+	SubID      string `json:"subId"`
+}
+
 // Add client to an inbound.
-func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []XrayClient) (*ApiResponse, error) {
+func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []any) (*ApiResponse, error) {
 	settings := &ClientSettings{Clients: clients}
 	settingsBytes, err := json.Marshal(settings)
 	if err != nil {
