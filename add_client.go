@@ -32,7 +32,10 @@ type AddClientRequest struct {
 }
 
 type ClientSettings struct {
-	Clients []any `json:"clients"`
+	Clients []ClientInterface `json:"clients"`
+}
+type ClientInterface interface {
+    isClient()
 }
 
 const (
@@ -53,6 +56,8 @@ type XrayClient struct {
 	Flow       string `json:"flow"`
 }
 
+func (XrayClient) isClient() {}
+
 type TrojanClient struct {
 	Password   string `json:"password"`
 	Email      string `json:"email"`
@@ -64,8 +69,10 @@ type TrojanClient struct {
 	SubID      string `json:"subId"`
 }
 
+func (TrojanClient) isClient() {}
+
 // Add client to an inbound.
-func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []any) (*ApiResponse, error) {
+func (c *Client) AddAnyClient(ctx context.Context, inboundId uint, clients []ClientInterface) (*ApiResponse, error) {
 	settings := &ClientSettings{Clients: clients}
 	settingsBytes, err := json.Marshal(settings)
 	if err != nil {
@@ -82,4 +89,13 @@ func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []any) (
 		return resp, fmt.Errorf(resp.Msg)
 	}
 	return resp, err
+}
+
+// Backward-compatible: only XrayClient
+func (c *Client) AddClient(ctx context.Context, inboundId uint, clients []XrayClient) (*ApiResponse, error) {
+    generic := make([]ClientInterface, len(clients))
+    for i, cl := range clients {
+        generic[i] = cl
+    }
+    return c.AddAnyClient(ctx, inboundId, generic)
 }

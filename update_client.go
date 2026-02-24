@@ -50,7 +50,7 @@ type UpdateClientRequest struct {
 // }
 
 // Update client in inbound.
-func (c *Client) UpdateClient(ctx context.Context, inboundId uint, clientId string, clients []any) (*ApiResponse, error) {
+func (c *Client) UpdateClient(ctx context.Context, inboundId uint, clientId string, clients []ClientInterface) (*ApiResponse, error) {
 	settings := &ClientSettings{Clients: clients}
 	settingsBytes, err := json.Marshal(settings)
 	if err != nil {
